@@ -23,7 +23,7 @@ $cons_os = "SELECT  cd_os,
                     dbamv.fnc_long_para_char_os(CD_OS) AS DS_OBSERVACAO
             FROM SOLICITACAO_OS
             WHERE CD_OFICINA = 28
-            AND tp_situacao <> 'C'";
+            AND tp_situacao NOT IN ('C','D')";
             
             echo 'Adicionando todos os chamados ao Jira';  
 
@@ -34,10 +34,10 @@ else { $cons_os = "SELECT  cd_os,
                     dbamv.fnc_long_para_char_os(CD_OS) AS DS_OBSERVACAO
             FROM SOLICITACAO_OS
             WHERE CD_OFICINA = 28
-            AND tp_situacao <> 'C'
+            AND tp_situacao NOT IN ('C','D')
             AND cd_os NOT IN ($os_code)";
 
-            echo 'to enlouquecendo';
+            echo 'Adicionando novos chamados ao Jira';
 
             }
             
@@ -92,8 +92,6 @@ while($row_cons_os = oci_fetch_array($result_cons_os, OCI_ASSOC)){
   $body = json_encode($bodyarr);
 
 
-
-
   $IssueCreate = Unirest\Request::post(
     'https://godoygustavofernandes.atlassian.net/rest/api/3/issue',
     $headers,
@@ -101,5 +99,5 @@ while($row_cons_os = oci_fetch_array($result_cons_os, OCI_ASSOC)){
     ['timeout' => 60]
   );
 
-  echo $var_cd_os . $IssueCreate->raw_body;
+  echo $Inserido;
 };
